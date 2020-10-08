@@ -1,0 +1,119 @@
+<style>
+  .content {
+    display: flex;
+    margin: 5px auto 35px;
+    padding: 0 5px;
+    max-width: 960px;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  /* Responsive Styles */
+  @media screen and (max-width: 767px) {
+
+    .card-container>*:not(.circle-link),
+    .terminal {
+      width: 100%;
+    }
+
+    .card:not(.highlight-card) {
+      height: 16px;
+      margin: 8px 0;
+    }
+
+    .card.highlight-card span {
+      margin-left: 72px;
+    }
+
+    svg#rocket-smoke {
+      right: 120px;
+      transform: rotate(-5deg);
+    }
+  }
+
+  @media screen and (max-width: 575px) {
+    svg#rocket-smoke {
+      display: none;
+      visibility: hidden;
+    }
+  }
+
+  .inputfile {
+    /* visibility: hidden etc. wont work */
+    width: 0.1px;
+    height: 0.1px;
+    opacity: 0;
+    overflow: hidden;
+    position: absolute;
+    z-index: -1;
+  }
+
+  .inputfile:focus+label {
+    /* keyboard navigation */
+    outline: 1px dotted #000;
+    outline: -webkit-focus-ring-color auto 5px;
+  }
+
+  .inputfile+label * {
+    pointer-events: none;
+  }
+</style>
+
+<div class="content">
+
+  <h2>Personas</h2>
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Nombre</th>
+        <th>Edad</th>
+        <th>Sexo</th>
+        <th>Documento</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor='let persona of personas'>
+        <td>{{ persona.nombre }}</td>
+        <td>{{ persona.edad }}</td>
+        <td>{{ persona.sexo }}</td>
+        <td>{{ persona.documento }}</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <form [formGroup]="formulario" (ngSubmit)="onSubmit()">
+    <div class="form-group">
+      <label for="nombre">Nombre</label>
+      <input type="text" class="form-control" formControlName="nombre" placeholder="Nombre">
+      <div *ngIf="f.nombre.touched && f.nombre.invalid" class="alert alert-danger">
+        <div *ngIf="f.nombre.errors.required">Nombre is requirida.</div>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="edad">Edad</label>
+      <input type="text" class="form-control" formControlName="edad" placeholder="Edad">
+      <div *ngIf="f.edad.touched && f.edad.invalid" class="alert alert-danger">
+        <div *ngIf="f.edad.errors.required">Edad is requirida.</div>
+        <div *ngIf="f.edad.errors.pattern">Nada mas se pueden ingresar numeros.</div>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="sexo">Sexo</label>
+      <select class="form-control" formControlName="sexo">
+        <option value="Hombre">Hombre</option>
+        <option value="Mujer">Mujer</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label>Subir documento</label>
+      <input type="file" class="form-control-file inputfile" id="doc" name="doc" formControlName="documento"
+        title="Elegir archivo">
+      <label class=" form-control btn btn-primary" for="doc">Elegir Archivo</label>
+    </div>
+
+    <button type="submit" class="btn btn-success pull-right">Guardar</button>
+  </form>
+</div>
